@@ -2,3 +2,20 @@ map @routineMap {
   insert insertKey error message "the '%K' routine has been already declared"
   search searchKey error message "the '%K' routine is not declared"
 }
+
+abstract class @instruction {
+}
+
+class @penUp : @instruction {
+}
+
+class @penDown : @instruction {
+}
+
+class @forward : @instruction {
+  @luint mLength
+}
+
+class @rotate : @instruction {
+  @luint mAngle
+}

@@ -38,8 +38,10 @@ rule <instruction> ?!@routineMap ioTableRoutines {
     [ioTableRoutines searchKey !routineName]
   or
     $FORWARD$ $integer$ ?let @luint distance
+    @instruction instruction = @forward.new {!distance}
   or
     $ROTATE$ $integer$ ?let @luint angle
+    @instruction instruction = @rotate.new {!angle}
   or
     <pen_instruction>
   end
@@ -49,8 +51,10 @@ rule <pen_instruction> {
   $PEN$
   select
     $UP$
+    @instruction instruction = @penDown.new
   or
     $DOWN$
+    @instruction instruction = @penUp.new
   end
 }
 
