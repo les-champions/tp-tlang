@@ -12,6 +12,16 @@ $identifier$ ! tokenString error message "an identifier"
 
 #--- This is the keyword list
 list keyWordList style keywordsStyle error message "the '%K' keyword" {
+  "PROGRAM",
+  "ROUTINE",
+  "BEGIN",
+  "END",
+  "FORWARD",
+  "ROTATE",
+  "CALL",
+  "PEN",
+  "UP",
+  "DOWN",
   "begin",
   "end"
 }
@@ -47,35 +57,12 @@ rule '0'->'9' {
 }
 
 #----------------------------------------------------------------------------------------------------------------------*
-#   Literal character strings                                                                                          *
-#----------------------------------------------------------------------------------------------------------------------*
-
-style stringStyle -> "String Constants"
-$literal_string$ ! tokenString style stringStyle %nonAtomicSelection error message "a character string constant \"...\""
-
-
-message incorrectStringEnd : "string does not end with '\"'"
-
-rule '"' {
-  repeat
-   while ' ' | '!' | '#'-> '\uFFFD' :
-    enterCharacterIntoString (!?tokenString !*)
-  end
-  select
-  case '"' :
-    send $literal_string$
-  default
-    error incorrectStringEnd
-  end
-}
-
-#----------------------------------------------------------------------------------------------------------------------*
 #   Delimiters                                                                                                         *
 #----------------------------------------------------------------------------------------------------------------------*
 
 style delimitersStyle -> "Delimiters"
 list delimitorsList style delimitersStyle error message "the '%K' delimitor" {
-  ":",    ",",    ";",   "!",  "{",  "}", "->", "@", "*", "-"
+  ";",   "."
 }
 
 rule list delimitorsList
