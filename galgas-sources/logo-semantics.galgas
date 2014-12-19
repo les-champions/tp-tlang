@@ -19,3 +19,7 @@ class @forward : @instruction {
 class @rotate : @instruction {
   @luint mAngle
 }
+
+list @instructionList {
+  @instruction mInstruction
+}

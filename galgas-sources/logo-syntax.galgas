@@ -25,37 +25,42 @@ rule <routine_definition> ?!@routineMap ioTableRoutines {
 }
 
 rule <instruction_list> ?!@routineMap ioTableRoutines {
+  @instructionList instructions = {}
   repeat
   while
-    <instruction> !?ioTableRoutines
+    <instruction> !?ioTableRoutines !?instructions
     $;$
   end
 }
 
-rule <instruction> ?!@routineMap ioTableRoutines {
+rule <instruction> ?!@routineMap ioTableRoutines ?!@instructionList instructions{
   select
     $CALL$ $identifier$ ?let @lstring routineName
     [ioTableRoutines searchKey !routineName]
   or
     $FORWARD$ $integer$ ?let @luint distance
     @instruction instruction = @forward.new {!distance}
+    instructions += !instruction
   or
     $ROTATE$ $integer$ ?let @luint angle
     @instruction instruction = @rotate.new {!angle}
+    instructions += !instruction
   or
-    <pen_instruction>
+    <pen_instruction> !?instructions
   end
 }
 
-rule <pen_instruction> {
+rule <pen_instruction> ?!@instructionList instructions{
+  @instruction instruction
   $PEN$
   select
     $UP$
-    @instruction instruction = @penDown.new
+    instruction = @penDown.new
   or
     $DOWN$
-    @instruction instruction = @penUp.new
+    instruction = @penUp.new
   end
+  instructions += !instruction
 }
 
 }
