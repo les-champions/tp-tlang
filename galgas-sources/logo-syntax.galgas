@@ -3,35 +3,39 @@ syntax logo_syntax (logo_lexique) {
 rule <start_symbol> {
   #-- Définition des routines
   $PROGRAM$
+  @routineMap tableRoutines = {}
   repeat
   while
-    <routine_definition>
+    <routine_definition> !?tableRoutines
   end
   #--- Programme principal
   $BEGIN$
-    <instruction_list>
+    <instruction_list> !?tableRoutines
   $END$
   $.$
 }
 
-rule <routine_definition> {
+rule <routine_definition> ?!@routineMap ioTableRoutines {
   $ROUTINE$
   $identifier$ ?let @lstring routineName
+  [!?ioTableRoutines insertKey !routineName]
   $BEGIN$
-    <instruction_list>
+    <instruction_list> !?ioTableRoutines
   $END$
 }
 
-rule <instruction_list> {
+rule <instruction_list> ?!@routineMap ioTableRoutines {
   repeat
   while
-    <instruction> $;$
+    <instruction> !?ioTableRoutines
+    $;$
   end
 }
 
-rule <instruction> {
+rule <instruction> ?!@routineMap ioTableRoutines {
   select
     $CALL$ $identifier$ ?let @lstring routineName
+    [ioTableRoutines searchKey !routineName]
   or
     $FORWARD$ $integer$ ?let @luint distance
   or
