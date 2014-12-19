@@ -10,7 +10,8 @@ rule <start_symbol> {
   end
   #--- Programme principal
   $BEGIN$
-    <instruction_list> !?tableRoutines
+    @instructionList instructions = {}
+    <instruction_list> !?tableRoutines !?instructions
   $END$
   $.$
 }
@@ -18,14 +19,14 @@ rule <start_symbol> {
 rule <routine_definition> ?!@routineMap ioTableRoutines {
   $ROUTINE$
   $identifier$ ?let @lstring routineName
-  [!?ioTableRoutines insertKey !routineName]
   $BEGIN$
-    <instruction_list> !?ioTableRoutines
+    @instructionList instructions = {}
+    <instruction_list> !?ioTableRoutines !?instructions
+    [!?ioTableRoutines insertKey !routineName !instructions]
   $END$
 }
 
-rule <instruction_list> ?!@routineMap ioTableRoutines {
-  @instructionList instructions = {}
+rule <instruction_list> ?!@routineMap ioTableRoutines ?!@instructionList instructions{
   repeat
   while
     <instruction> !?ioTableRoutines !?instructions
@@ -36,7 +37,8 @@ rule <instruction_list> ?!@routineMap ioTableRoutines {
 rule <instruction> ?!@routineMap ioTableRoutines ?!@instructionList instructions{
   select
     $CALL$ $identifier$ ?let @lstring routineName
-    [ioTableRoutines searchKey !routineName]
+    @instructionList instructionsRoutine
+    [ioTableRoutines searchKey !routineName ?instructionsRoutine]
   or
     $FORWARD$ $integer$ ?let @luint distance
     @instruction instruction = @forward.new {!distance}

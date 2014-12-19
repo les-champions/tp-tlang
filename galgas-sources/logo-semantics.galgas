@@ -1,4 +1,5 @@
 map @routineMap {
+  @instructionList mInstructionList
   insert insertKey error message "the '%K' routine has been already declared"
   search searchKey error message "the '%K' routine is not declared"
 }
