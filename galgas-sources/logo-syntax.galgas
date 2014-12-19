@@ -1,9 +1,53 @@
 syntax logo_syntax (logo_lexique) {
 
 rule <start_symbol> {
-  # ADD YOUR SYNTAX INSTRUCTIONS
+  #-- Définition des routines
+  $PROGRAM$
+  repeat
+  while
+    <routine_definition>
+  end
+  #--- Programme principal
+  $BEGIN$
+    <instruction_list>
+  $END$
+  $.$
 }
 
-# ADD OTHER RULES
+rule <routine_definition> {
+  $ROUTINE$
+  $identifier$ ?let @lstring routineName
+  $BEGIN$
+    <instruction_list>
+  $END$
+}
+
+rule <instruction_list> {
+  repeat
+  while
+    <instruction> $;$
+  end
+}
+
+rule <instruction> {
+  select
+    $CALL$ $identifier$ ?let @lstring routineName
+  or
+    $FORWARD$ $integer$ ?let @luint distance
+  or
+    $ROTATE$ $integer$ ?let @luint angle
+  or
+    <pen_instruction>
+  end
+}
+
+rule <pen_instruction> {
+  $PEN$
+  select
+    $UP$
+  or
+    $DOWN$
+  end
+}
 
 }
