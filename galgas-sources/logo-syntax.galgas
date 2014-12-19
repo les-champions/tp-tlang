@@ -39,6 +39,9 @@ rule <instruction> ?!@routineMap ioTableRoutines ?!@instructionList instructions
     $CALL$ $identifier$ ?let @lstring routineName
     @instructionList instructionsRoutine
     [ioTableRoutines searchKey !routineName ?instructionsRoutine]
+    for i in instructionsRoutine do
+      instructions += !i.mInstruction
+    end
   or
     $FORWARD$ $integer$ ?let @luint distance
     @instruction instruction = @forward.new {!distance}
