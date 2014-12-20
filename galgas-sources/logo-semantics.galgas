@@ -6,19 +6,63 @@ map @routineMap {
 
 abstract class @instruction {
 }
+abstract method @instruction codeDisplay
+  ?!@bool ioPenDown
+  ?!@double ioX
+  ?!@double ioY
+  ?!@double ioAngle
 
 class @penUp : @instruction {
 }
+override method @penUp codeDisplay
+  ?!@bool ioPenDown
+  ?!@double unused ioX
+  ?!@double unused ioY
+  ?!@double unused ioAngle
+{
+  ioPenDown = false
+}
 
 class @penDown : @instruction {
+}
+override method @penDown codeDisplay
+  ?!@bool ioPenDown
+  ?!@double unused ioX
+  ?!@double unused ioY
+  ?!@double unused ioAngle
+{
+  ioPenDown = true
 }
 
 class @forward : @instruction {
   @luint mLength
 }
+override method @forward codeDisplay
+  ?!@bool   ioPenDown
+  ?!@double ioX
+  ?!@double ioY
+  ?!@double ioAngle
+{
+  if ioPenDown then
+    message "Drawing from ("+ioX+", "+ioY+") "
+  end
+  ioX = ioX + [ioAngle cosDegree] * [[mLength uint] double]
+  ioY = ioY + [ioAngle sinDegree] * [[mLength uint] double]
+  if ioPenDown then
+    message "to ("+ioX+", "+ioY+")\n"
+  end
+}
 
 class @rotate : @instruction {
   @luint mAngle
+}
+override method @rotate codeDisplay
+  ?!@bool   unused ioPenDown
+  ?!@double unused ioX
+  ?!@double unused ioY
+  ?!@double ioAngle
+{
+  ioAngle = ioAngle + [[mAngle uint] double]
 }
 
 list @instructionList {
