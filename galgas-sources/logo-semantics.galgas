@@ -51,8 +51,12 @@ override method @forward codeDisplay
   @double relativeY = [ioAngle sinDegree] * [[mLength uint] double]
   if ioPenDown then
     message "Drawing from ("+ioX+", "+ioY+") the segment ("+relativeX+", "+relativeY+")\n"
+    # SVG path specification:
+    # http://www.w3.org/TR/SVG/paths.html#PathData
+    # lowercase l means relative lineTo
     SVG = SVG + "l"+relativeX+","+relativeY
   else
+    # lowercase m means relative moveTo
     SVG = SVG + "m"+relativeX+","+relativeY
   end
   ioX = ioX + relativeX
