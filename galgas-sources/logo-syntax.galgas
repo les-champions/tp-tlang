@@ -60,10 +60,10 @@ rule <pen_instruction> ?!@instructionList instructions{
   $PEN$
   select
     $UP$
-    instruction = @penDown.new
+    instruction = @penUp.new
   or
     $DOWN$
-    instruction = @penUp.new
+    instruction = @penDown.new
   end
   instructions += !instruction
 }
