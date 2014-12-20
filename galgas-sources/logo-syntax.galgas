@@ -20,9 +20,19 @@ rule <start_symbol> {
   @double x = 0.0
   @double y = 0.0
   @double angle = 0.0 # Angle en degrés
+  @string SVG = ""
   for i in instructions do
-    [i.mInstruction codeDisplay !?penDown !?x !?y !?angle]
+    [i.mInstruction codeDisplay !?penDown !?x !?y !?angle !?SVG]
   end
+  # SVG file output
+  let @string sourceFilePath = @string.stringWithSourceFilePath
+  let @string code = [filewrapper generationTemplate.svg
+    ![sourceFilePath lastPathComponent]
+    !SVG
+  ]
+  [code writeToFile
+    ![sourceFilePath stringByDeletingPathExtension] + ".svg"
+  ]
 }
 
 rule <routine_definition> ?!@routineMap ioTableRoutines {

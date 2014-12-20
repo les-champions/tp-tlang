@@ -11,6 +11,7 @@ abstract method @instruction codeDisplay
   ?!@double ioX
   ?!@double ioY
   ?!@double ioAngle
+  ?!@string SVG
 
 class @penUp : @instruction {
 }
@@ -19,6 +20,7 @@ override method @penUp codeDisplay
   ?!@double unused ioX
   ?!@double unused ioY
   ?!@double unused ioAngle
+  ?!@string unused SVG
 {
   ioPenDown = false
 }
@@ -30,6 +32,7 @@ override method @penDown codeDisplay
   ?!@double unused ioX
   ?!@double unused ioY
   ?!@double unused ioAngle
+  ?!@string unused SVG
 {
   ioPenDown = true
 }
@@ -42,15 +45,18 @@ override method @forward codeDisplay
   ?!@double ioX
   ?!@double ioY
   ?!@double ioAngle
+  ?!@string SVG
 {
+  @double relativeX = [ioAngle cosDegree] * [[mLength uint] double]
+  @double relativeY = [ioAngle sinDegree] * [[mLength uint] double]
   if ioPenDown then
-    message "Drawing from ("+ioX+", "+ioY+") "
+    message "Drawing from ("+ioX+", "+ioY+") the segment ("+relativeX+", "+relativeY+")\n"
+    SVG = SVG + "l"+relativeX+","+relativeY
+  else
+    SVG = SVG + "m"+relativeX+","+relativeY
   end
-  ioX = ioX + [ioAngle cosDegree] * [[mLength uint] double]
-  ioY = ioY + [ioAngle sinDegree] * [[mLength uint] double]
-  if ioPenDown then
-    message "to ("+ioX+", "+ioY+")\n"
-  end
+  ioX = ioX + relativeX
+  ioY = ioY + relativeY
 }
 
 class @rotate : @instruction {
@@ -61,6 +67,7 @@ override method @rotate codeDisplay
   ?!@double unused ioX
   ?!@double unused ioY
   ?!@double ioAngle
+  ?!@string unused SVG
 {
   ioAngle = ioAngle + [[mAngle uint] double]
 }
@@ -68,3 +75,11 @@ override method @rotate codeDisplay
 list @instructionList {
   @instruction mInstruction
 }
+
+filewrapper generationTemplate in "." {
+} {} {
+template svg "logo-svg.galgasTemplate"
+  ?@string TITLE
+  ?@string DRAWINGS
+}
+
