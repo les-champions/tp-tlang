@@ -14,6 +14,7 @@ $identifier$ ! tokenString error message "an identifier"
 list keyWordList style keywordsStyle error message "the '%K' keyword" {
   "PROGRAM",
   "ROUTINE",
+  "REPEAT",
   "BEGIN",
   "END",
   "FORWARD",

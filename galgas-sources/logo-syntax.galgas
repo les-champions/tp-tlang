@@ -71,6 +71,19 @@ rule <instruction> ?!@routineMap ioTableRoutines ?!@instructionList instructions
     instructions += !instruction
   or
     <pen_instruction> !?instructions
+  or
+    $REPEAT$ $integer$ ?let @luint nbrTimes
+      @instructionList instructionsRepeat = {}
+      <instruction_list> !?ioTableRoutines !?instructionsRepeat
+    $END$
+    @uint i = [nbrTimes uint]
+    loop ([nbrTimes uint])
+    while i > 0 do
+      for inst in instructionsRepeat do
+        instructions += !inst.mInstruction
+      end
+      i--
+    end
   end
 }
 
